@@ -1,0 +1,117 @@
+<Window x:Class="ImageRenamer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Image Renamer"
+        Width="760" Height="610"
+        MinWidth="650" MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBrush}"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="Segoe UI"
+        Icon="Assets/ImageRenamer.ico">
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="58" />
+                <ColumnDefinition Width="14" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Border Width="56" Height="56" CornerRadius="15" Background="#202A33" BorderBrush="#35434D" BorderThickness="1">
+                <Viewbox Margin="13">
+                    <Canvas Width="32" Height="32">
+                        <Rectangle Width="27" Height="22" RadiusX="4" RadiusY="4" Stroke="#80CBC4" StrokeThickness="2" Canvas.Left="2" Canvas.Top="3" />
+                        <Ellipse Width="5" Height="5" Fill="#80CBC4" Canvas.Left="8" Canvas.Top="8" />
+                        <Path Data="M 5,22 L 12,14 L 16,18 L 20,12 L 27,22 Z" Stroke="#80CBC4" StrokeThickness="2" Fill="#355B5A" StrokeLineJoin="Round" />
+                        <Border Width="13" Height="13" CornerRadius="6.5" Background="#80CBC4" Canvas.Left="18" Canvas.Top="18">
+                            <TextBlock Text="1" Foreground="#102226" FontWeight="Bold" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Canvas>
+                </Viewbox>
+            </Border>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                <TextBlock Text="Image Renamer" FontSize="23" FontWeight="SemiBold" />
+                <TextBlock Text="BATCH RENAME UTILITY" FontSize="10" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" Margin="1,3,0,0" />
+            </StackPanel>
+            <Border Grid.Column="3" VerticalAlignment="Center" Background="#1B292A" BorderBrush="#34504F" BorderThickness="1" CornerRadius="14" Padding="11,6">
+                <TextBlock Text="LOCAL FILES" FontSize="9" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" />
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="1" Height="1" Background="#29313A" VerticalAlignment="Bottom" />
+
+        <!-- Folder selection -->
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="IMAGE FOLDER" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" Margin="1,0,0,9" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="FolderPathTextBox" Grid.Column="0" Style="{StaticResource PathTextBoxStyle}" IsReadOnly="True" />
+                <Button x:Name="BrowseButton" Grid.Column="2" Content="Browse folder" Style="{StaticResource SecondaryButtonStyle}" Click="BrowseButton_Click" />
+            </Grid>
+            <TextBlock Text="Only files directly inside this folder are included. Subfolders are left unchanged." FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="2,8,0,0" />
+        </StackPanel>
+
+        <!-- Count card -->
+        <Border Grid.Row="4" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="IMAGES DETECTED" FontSize="10" FontWeight="Bold" Foreground="{StaticResource MutedBrush}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock x:Name="ImageCountText" Text="0" FontSize="35" FontWeight="SemiBold" />
+                        <TextBlock Text=" images" FontSize="14" Foreground="{StaticResource MutedBrush}" VerticalAlignment="Bottom" Margin="9,0,0,7" />
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Column="1" Width="46" Height="46" CornerRadius="12" Background="#263B3A" VerticalAlignment="Center">
+                    <TextBlock Text="▧" FontSize="25" Foreground="{StaticResource PrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Progress card -->
+        <Border Grid.Row="6" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="20">
+            <StackPanel>
+                <Grid Margin="0,0,0,12">
+                    <TextBlock x:Name="StatusText" Text="Ready. Select a folder to begin." FontSize="13" />
+                    <TextBlock x:Name="ProgressPercentText" Text="0%" FontSize="12" Foreground="{StaticResource MutedBrush}" HorizontalAlignment="Right" />
+                </Grid>
+                <ProgressBar x:Name="RenameProgressBar" Height="7" Minimum="0" Maximum="100" Value="0"
+                             Background="#303944" Foreground="{StaticResource PrimaryBrush}" BorderThickness="0" />
+                <TextBlock x:Name="ProgressDetailText" Text="Waiting for action" FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="0,10,0,0" />
+            </StackPanel>
+        </Border>
+
+        <!-- Actions -->
+        <Grid Grid.Row="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="RenameButton" Grid.Column="0" Content="Rename images" Style="{StaticResource PrimaryButtonStyle}" Click="RenameButton_Click" IsEnabled="False" />
+            <Button x:Name="RescanButton" Grid.Column="2" Content="Rescan" Style="{StaticResource SecondaryButtonStyle}" Click="RescanButton_Click" />
+        </Grid>
+
+    </Grid>
+</Window>
